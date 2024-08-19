@@ -1,0 +1,1 @@
+#let package = toml("../typst.toml").package
