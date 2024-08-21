@@ -21,7 +21,7 @@
   next(input, input)
 }
 
-#let impl() = (:
+#let layer() = (:
   validation: validation,
   input-assembler: input-assembler,
   compute: compute,

@@ -5,6 +5,12 @@
     high: (1, 1),
     low: (-1, -1),
   )
+
+  // TODO: Make this a fold
+  let bounds = none
+  for cmd in commands {
+    
+  }
 }
 
 // TODO: Throw away commands without root position or body
