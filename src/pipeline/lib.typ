@@ -1,5 +1,4 @@
 #import "canvas/lib.typ" as canvas
-#import "layers/lib.typ" as layer
 #import "sorting/lib.typ" as sorting
 #import "stages/lib.typ" as stages
 #import "primitives.typ"
@@ -21,7 +20,7 @@
 
   return (commands, scale: 1em) => {
 
-
+    if commands == none {return}
     if commands.len() == 0 {return}
 
     // Validation layer

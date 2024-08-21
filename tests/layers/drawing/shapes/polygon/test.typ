@@ -3,8 +3,8 @@
 
 #let plotter = pipeline.factory(
   layers: (
-    pipeline.layer.debug(),
-    pipeline.layer.drawing.layer(validation: true),
+    layer.debug(),
+    layer.drawing.layer(validation: true),
   ),
 )
 
@@ -22,8 +22,8 @@
   ),
 )
 
+#import layer: drawing
+
 #plotter({
-  duff-cmd()
-  duff-cmd(pos: (0, 1))
-  duff-cmd(pos: (1, 2))
+  drawing.shapes.polygon()
 })

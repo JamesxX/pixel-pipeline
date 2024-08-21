@@ -1,7 +1,9 @@
-#import "../primitives.typ"
+#import "../pipeline/primitives.typ"
 
 #let validation(input, output, next) = {
-  output.push("Hello")
+  output += input.map(it=>{
+    if type(it) != dictionary {return "Unexpected command structure " + repr(it)}
+  }).filter(it=>it!=none)
   next(input, output)
 }
 
