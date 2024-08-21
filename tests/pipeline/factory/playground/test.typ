@@ -7,10 +7,22 @@
   ),
 )
 
-#let duff-cmd = (pipeline.primitives.assembled(),)
+#let duff-cmd(pos: (0,0)) = (
+  pipeline.primitives.rendered(
+    pipeline.primitives.positioned(
+      pipeline.primitives.assembled(
+        tags: ("hello",)
+      ),
+      positions: (:
+        root: pos
+      )
+    ),
+    content: [Hello]
+  ),
+)
 
 #plotter({
-  duff-cmd
-  duff-cmd
-  duff-cmd
+  duff-cmd()
+  duff-cmd(pos: (0, 1))
+  duff-cmd(pos: (1, 2))
 })

@@ -1,3 +1,5 @@
+#import "../primitives.typ"
+
 #let validation(input, output, next) = {
   output.push("Hello")
   next(input, output)
@@ -15,9 +17,14 @@
   next(input, output)
 }
 
+#let render(input, output, next)={
+  next(input, input)
+}
+
 #let impl() = (:
   validation: validation,
   input-assembler: input-assembler,
   compute: compute,
   vertex: vertex,
+  render: render,
 )

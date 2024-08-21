@@ -14,11 +14,21 @@
   positions: (),
   relative: none,
   tags: (),
-  ..assembly
+  assembly
 ) = (:
-  ..assembly.named(),
+  ..assembly,
   name: name,
   positions: positions,
   relative: relative,
   tags: (..tags, "positioned")
+)
+
+#let rendered(
+  content: none,
+  tags: (),
+  positioned,
+) = (:
+  ..positioned,
+  content: content,
+  tags: (..tags, "rendered")
 )

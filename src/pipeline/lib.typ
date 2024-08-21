@@ -5,37 +5,39 @@
 #import "primitives.typ"
 #import "middleware.typ"
 
+///
 #let factory(
   layers: (),
-  stages: auto,
   anchor-sorter: sorting.dependency,
 ) = {
 
-  let stages = if (stages == auto){ 
-    layers.map(layer=>layer.keys())
+  let active-middleware = layers.map(layer=>layer.keys())
           .flatten()
           .dedup() 
-  } else {stages}
-  
-  return (commands, ..inputs) => {
+
+  let validate = middleware.through-layers(layers, "validation")
+  let compute = middleware.through-layers(layers, "compute")
+  let render = middleware.through-layers(layers, "render")
+
+  return (commands, scale: 1em) => {
 
 
     if commands.len() == 0 {return}
 
     // Validation layer
-    if "validation" in stages {
-      let validate = middleware.through-layers(layers, "validation")
+    if "validation" in active-middleware {
+      
       let results = validate(commands, ())
     }
 
     // Compute
-    if "compute" in stages {
-      let compute = middleware.through-layers(layers, "compute")
+    if "compute" in active-middleware {
+      
       commands = commands.map(cmd=>compute(cmd,cmd))
     }
 
     // Vertex shader (pipeline space)
-    if "vertex" in stages {
+    if "vertex" in active-middleware {
       let compute = middleware.through-layers(layers, "vertex")
       commands = commands.map(cmd=>compute(cmd,cmd))
     }
@@ -46,7 +48,7 @@
     // Projection
 
     // Anchor shader (pipeline space - relative)
-    if "anchor" in stages {
+    if "anchor" in active-middleware {
       // sort by dependency
       if anchor-sorter != none {commands = anchor-sorter(commands)}
     }
@@ -58,7 +60,12 @@
     // 
     // sort by z-index
     // Typesetter
-    // 
-    return commands
+    
+    if "render" in active-middleware {
+      stages.typeset(commands, render, scale: scale)
+    }
+
+
+    // return commands
   }
 }
