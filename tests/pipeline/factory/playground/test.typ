@@ -5,13 +5,9 @@
   layers: (
     pipeline.layer.debug(),
   ),
-  // input-assembler: (i,o,n)=>n(i, o)
-  validation: (i,o,n)=>n(i, o)
 )
 
-#let duff-cmd = (pipeline.primitives.assembled(
-  stages: ("compute","vertex")
-),)
+#let duff-cmd = (pipeline.primitives.assembled(),)
 
 #plotter({
   duff-cmd

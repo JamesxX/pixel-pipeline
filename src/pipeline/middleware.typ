@@ -5,15 +5,21 @@
   )
 }
 
-#let through-layers(input, output, layers, named, key) = {
+#let through-layers(layers, key) = (input, output) => apply(
+  input,
+  output,
+  layers.map(layer=>layer.at(key, default: none))
+        .filter(it=>it!=none)
+)
 
-  layers = layers.map(layer=>layer.at(key, default: none))
-  layers.push(named.at(key, default: none))
-  layers = layers.filter(it=>it!=none)
+// #let through-layers(input, output, layers, key) = {
 
-  apply(
-    input, 
-    output, 
-    layers
-  )
-}
+//   layers = layers.map(layer=>layer.at(key, default: none))
+//   layers = layers.filter(it=>it!=none)
+
+//   apply(
+//     input, 
+//     output, 
+//     layers
+//   )
+// }
