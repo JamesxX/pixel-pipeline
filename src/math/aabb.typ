@@ -8,14 +8,14 @@
       if bounds == none and i == 0 {
         bounds = (low: pt, high: pt)
       } else {
-        assert(type(pt) == array and pt.len() == 3, message: repr(initial) + repr(vecs))
-        let (x, y, z) = pt
+        assert(type(pt) == array, message: repr(initial) + repr(vecs))
+        let (x, y,) = pt
 
-        let (lo-x, lo-y, lo-z) = bounds.low
-        bounds.low = (calc.min(lo-x, x), calc.min(lo-y, y), calc.min(lo-z, z))
+        let (lo-x, lo-y,) = bounds.low
+        bounds.low = (calc.min(lo-x, x), calc.min(lo-y, y))
 
-        let (hi-x, hi-y, hi-z) = bounds.high
-        bounds.high = (calc.max(hi-x, x), calc.max(hi-y, y), calc.max(hi-z, z))
+        let (hi-x, hi-y) = bounds.high
+        bounds.high = (calc.max(hi-x, x), calc.max(hi-y, y))
       }
     }
     return bounds
@@ -23,7 +23,7 @@
     if initial == none {
       return vecs
     } else {
-      return aabb((pts.low, pts.high,), init: bounds)
+      return from-vectors((vecs.low, vecs.high,), initial: initial)
     }
   }
 }

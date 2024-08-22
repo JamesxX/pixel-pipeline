@@ -3,6 +3,19 @@
 #import "stages/lib.typ" as stages
 #import "primitives.typ"
 #import "middleware.typ"
+#import "../math/vector.typ"
+
+#let stages-render(commands, middleware) = {
+  commands.map(cmd=>cmd + middleware(cmd,(:)))
+}
+
+#let stages-measure(commands, middleware) = {
+  commands.map(cmd=>cmd + middleware(cmd,(:)))
+}
+
+#let stages-layout(commands, middleware, scale: 1em) = {
+  commands.map(cmd=>cmd + middleware(cmd,(:)))
+}
 
 ///
 #let factory(
@@ -17,6 +30,7 @@
   let validate-middleware = middleware.through-layers(layers, "validation")
   let compute-middleware = middleware.through-layers(layers, "compute")
   let render-middleware = middleware.through-layers(layers, "render")
+  let layout-middleware = middleware.through-layers(layers, "layout")
 
   /// - commands (array): Test
   return (commands, scale: 1em) => {
@@ -32,20 +46,17 @@
     }
 
     // Compute
-    if "compute" in active-middleware {
-      commands = commands.map(cmd=>cmd + compute-middleware(cmd,(:)))
+    if "compute" in active-middleware {commands = stages.compute(commands, compute-middleware)}
+
+    // Vertex Shader Pre
+    // -> anchor
+    if "vertex-1" in active-middleware {
+
     }
 
-    // Vertex shader (pipeline space)
-    if "vertex" in active-middleware {
-      let vertex-middleware = middleware.through-layers(layers, "vertex")
-      commands = commands.map(cmd=>cmd + vertex-middleware(cmd,(:)))
-    }
-
-    // Vector resolver
     
     
-    // Projection
+    // transformation 
 
     // Anchor shader (pipeline space - relative)
     if "anchor" in active-middleware {
@@ -56,16 +67,31 @@
     // BVH sorted (structured)
     // Intersection tests
     
-    // Fragment shader
-    // 
-    // sort by z-index
-    // Typesetter
+
+    // Final vertex projection
+    commands = commands.map(cmd => {
+      cmd.positions = arguments(
+        ..for (name, pos) in cmd.positions.named() {
+          (: (name): primitives.position(vector.scale(pos.position, scale), space: "screen"))
+        },
+        ..for (pos) in cmd.positions.pos(){
+          (primitives.position(vector.scale(pos.position, scale), space: "screen"),)
+        }
+      )
+      return cmd
+    })
     
+    // make content
     if "render" in active-middleware {
-      stages.typeset(commands, render-middleware, scale: scale)
+      commands = stages-render(commands, render-middleware)
     }
-
-
-    // return commands
+    
+    context if "layout" in active-middleware { 
+      let commands = commands.filter(cmd => cmd != none and cmd.at("content", default: none) != none)
+      commands = commands.map(cmd => (: measures: measure(cmd.content)) + cmd)
+      commands = stages-layout(commands, layout-middleware, scale: scale)
+      stages.typeset(commands)
+      // return commands
+    }
   }
 }

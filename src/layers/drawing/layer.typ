@@ -14,9 +14,14 @@
 
 #let _render(input, output, next) = {
   if "draw" not in input.tags {return next(input, output)}
-  next(input, input + (:
-    content: [Hello]
-  ))
+  return input + (:
+    content: box([He], stroke: 1pt)
+  )
+}
+
+#let _layout(input, output, next) = {
+  if "draw" not in input.tags {return next(input, output)}
+  return input
 }
 
 #let layer(
@@ -27,4 +32,5 @@
   // compute: compute,
   vertex: _vertex,
   render: _render,
+  layout: _layout,
 )

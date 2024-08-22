@@ -1,34 +1,34 @@
 #import "/src/math/lib.typ": vector, aabb
 
 #let _get-bounds(commands) = {
-  return (
-    high: (1, 1),
-    low: (-1, -1),
-  )
-
   // TODO: Make this a fold
   let bounds = none
   for cmd in commands {
-    
+    let half-measures = vector.scale( cmd.measures.values(), 0.5 )
+    let position = cmd.positions.named().root.position.map(dim=>dim.to-absolute())
+    bounds = aabb.from-vectors(
+      (
+        low: vector.sub(position, half-measures),
+        high: vector.add(position, half-measures),
+      ),
+      initial: bounds,
+    )
   }
+  return bounds
 }
 
 // TODO: Throw away commands without root position or body
 #let draw(cmd, scale: 1em, bounds: (:)) = context {
 
-  let (width, height) = measure(cmd.content)
-  let pos = vector.scale(
-    vector.sub(
-      cmd.positions.named().root.position,
-      bounds.low
-    ),
-    scale
+  let (width, height) = cmd.at("measures", default: (0pt, 0pt))
+  let pos = vector.sub(
+    cmd.positions.named().root.position,
+    bounds.low
   )
 
   place(
     top + left,
     float: false,
-    // dx: cmd.x * scale, dy: cmd.y * scale,
     move(
       dx: pos.at(0) - width / 2,
       dy: pos.at(1) - height / 2,
@@ -37,17 +37,13 @@
   )
 }
 
-
-#let typeset(commands, render-middleware, scale: 1em) = {
-  let commands = commands.map(cmd=>render-middleware(cmd,cmd))
-                         .filter(it=>it!=none)
-                         .filter(it=>("content" in it and it.content != none))
+#let typeset(commands) = {
   let bounds = _get-bounds(commands)
-  let (width, height) = vector.scale(aabb.size(bounds), scale)
+  let (width, height) = aabb.size(bounds)
 
   box(
     width: width, height: height,
     stroke: black,
-    align(top, commands.map(draw.with(scale: scale, bounds: bounds)).join())
+    align(top, commands.map(draw.with(bounds: bounds)).join())
   )
 }
