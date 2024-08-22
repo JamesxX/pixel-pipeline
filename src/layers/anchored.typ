@@ -1,5 +1,5 @@
 #let validation(input, output, next) = {
-  output.push("Initializing Anchored")
+  // output.push("Initializing Anchored")
   next(input, output)
 }
 

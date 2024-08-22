@@ -8,22 +8,13 @@
   ),
 )
 
-#let duff-cmd(pos: (0,0)) = (
-  pipeline.primitives.rendered(
-    pipeline.primitives.positioned(
-      pipeline.primitives.assembled(
-        tags: ("hello",)
-      ),
-      positions: (:
-        root: pos
-      )
-    ),
-    content: [Hello]
-  ),
-)
 
 #import layer: drawing
 
 #plotter({
-  drawing.shapes.polygon()
+  drawing.shapes.polygon(
+    fill: blue.lighten(80%),
+    stroke: blue,
+    ((2,0), (2,1), (3,1),)
+  )
 })

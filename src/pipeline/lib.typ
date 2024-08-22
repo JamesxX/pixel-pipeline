@@ -18,15 +18,17 @@
   let compute = middleware.through-layers(layers, "compute")
   let render = middleware.through-layers(layers, "render")
 
+  /// - commands (array): Test
   return (commands, scale: 1em) => {
 
-    if commands == none {return}
+    if type(commands) != array {return}
     if commands.len() == 0 {return}
 
     // Validation layer
     if "validation" in active-middleware {
       
       let results = validate(commands, ())
+      if results.len() > 0 {panic(results)}
     }
 
     // Compute

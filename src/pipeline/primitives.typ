@@ -11,12 +11,12 @@
 
 #let positioned(
   name: none,
-  positions: (),
+  positions: (root:(0,0)),
   relative: none,
   tags: (),
-  assembly
+  ..assembly
 ) = (:
-  ..assembly,
+  ..assembly.named(),
   name: name,
   positions: positions,
   relative: relative,
@@ -26,9 +26,9 @@
 #let rendered(
   content: none,
   tags: (),
-  positioned,
-) = (:
   ..positioned,
+) = (:
+  ..positioned.named(),
   content: content,
   tags: (..tags, "rendered")
 )

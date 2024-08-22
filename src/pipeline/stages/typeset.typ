@@ -31,7 +31,7 @@
 
 
 #let typeset(commands, render-middleware, scale: 1em) = {
-  let commands = commands.map(cmd=>render-middleware(cmd,none)).filter(it=>it!=none)
+  let commands = commands.map(cmd=>render-middleware(cmd,cmd)).filter(it=>"content" in it)
   let bounds = _get-bounds(commands)
   let (width, height) = vector.scale(aabb.size(bounds), scale)
 
