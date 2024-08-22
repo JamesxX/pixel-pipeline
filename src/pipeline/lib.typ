@@ -14,9 +14,9 @@
           .flatten()
           .dedup() 
 
-  let validate = middleware.through-layers(layers, "validation")
-  let compute = middleware.through-layers(layers, "compute")
-  let render = middleware.through-layers(layers, "render")
+  let validate-middleware = middleware.through-layers(layers, "validation")
+  let compute-middleware = middleware.through-layers(layers, "compute")
+  let render-middleware = middleware.through-layers(layers, "render")
 
   /// - commands (array): Test
   return (commands, scale: 1em) => {
@@ -27,20 +27,19 @@
     // Validation layer
     if "validation" in active-middleware {
       
-      let results = validate(commands, ())
+      let results = validate-middleware(commands, ())
       if results.len() > 0 {panic(results)}
     }
 
     // Compute
     if "compute" in active-middleware {
-      
-      commands = commands.map(cmd=>compute(cmd,cmd))
+      commands = commands.map(cmd=>cmd + compute-middleware(cmd,(:)))
     }
 
     // Vertex shader (pipeline space)
     if "vertex" in active-middleware {
-      let compute = middleware.through-layers(layers, "vertex")
-      commands = commands.map(cmd=>compute(cmd,cmd))
+      let vertex-middleware = middleware.through-layers(layers, "vertex")
+      commands = commands.map(cmd=>cmd + vertex-middleware(cmd,(:)))
     }
 
     // Vector resolver
@@ -63,7 +62,7 @@
     // Typesetter
     
     if "render" in active-middleware {
-      stages.typeset(commands, render, scale: scale)
+      stages.typeset(commands, render-middleware, scale: scale)
     }
 
 

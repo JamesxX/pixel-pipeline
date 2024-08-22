@@ -1,34 +1,33 @@
+#import "../primitives/position.typ": position
 
 #let assembled(
-  stages: (),
   tags: (),
   ..data
-) = (:
-  stages: stages,
-  tags: tags,
-  ..data.named()
-)
+) = {
+  (: tags: tags)
+  data.named()
+}
 
 #let positioned(
+  positions: arguments( root: position((0,0)) ),
   name: none,
-  positions: (root:(0,0)),
   relative: none,
-  tags: (),
-  ..assembly
-) = (:
-  ..assembly.named(),
-  name: name,
-  positions: positions,
-  relative: relative,
-  tags: (..tags, "positioned")
-)
+) = {
+  (: positions: positions,)
+  if name != none {(: name: name)}
+  if name != none {(: relative: relative)}
+}
+
+#let stroked(
+  fill: none,
+  stroke: none,
+) = {
+  if fill != none {(: fill: fill)}
+  if stroke != none {(: stroke: stroke)}
+}
 
 #let rendered(
   content: none,
-  tags: (),
-  ..positioned,
 ) = (:
-  ..positioned.named(),
   content: content,
-  tags: (..tags, "rendered")
 )

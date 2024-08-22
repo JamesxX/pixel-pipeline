@@ -1,2 +1,2 @@
-#import "/src/pipeline/primitives.typ": *
+#import "/src/primitives/lib.typ" as primitives
 
