@@ -105,6 +105,8 @@
         cmd => cmd.at("content", default: none) != none
       )
 
+      if commands.len() == 0 {return}
+
       // Provide measure of content, but allow it to be overriden
       commands = commands.map(cmd => (: measures: measure(cmd.content)) + cmd)
 

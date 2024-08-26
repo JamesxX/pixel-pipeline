@@ -1,1 +1,1 @@
-#import "../src/lib.typ" as dynamic-canvas
+#import "../src/lib.typ" as pixel

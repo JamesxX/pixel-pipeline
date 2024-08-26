@@ -18,6 +18,8 @@
   // printer-test: true, // Suitably placed CMYK printer tests
 )
 
+#show "PixelPipeline": raw("PixelPipeline")
+
 #pagebreak()
 #outline(indent: auto)
 #pagebreak()
@@ -35,6 +37,10 @@ See @fig:pipeline
 ) <fig:pipeline>
 
 == Primitives
+
+#springer-spaniel.gentle-clues.warning[
+  PixelPipeline doesn't support cyclic anchors. Such would result in an infinite loop.
+]
 
 == Stages
 

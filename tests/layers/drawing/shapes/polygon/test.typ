@@ -1,18 +1,17 @@
-#import "/tests/preamble.typ": *
-#import dynamic-canvas: *
+#import "/tests/preamble.typ": pixel
 
-#let plotter = pipeline.factory(
+#let plotter = pixel.pipeline.factory(
   layers: (
-    layer.debug(),
-    layer.drawing.layer(validation: true),
+    pixel.layer.debug(),
+    pixel.layer.drawing.layer(validation: true),
   ),
 )
 
 
-#import layer: drawing
+#import pixel.layer: drawing
 
 #let my-polygon(pos, ..args) = drawing.shapes.polygon(
-  position: primitives.position(pos),
+  position: pixel.primitives.position(pos),
   fill: blue.lighten(80%),
   stroke: blue,
   (
