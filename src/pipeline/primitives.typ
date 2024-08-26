@@ -11,11 +11,9 @@
 #let positioned(
   positions: arguments( root: position((0,0)) ),
   name: none,
-  relative: none,
 ) = {
   (: positions: positions,)
   if name != none {(: name: name)}
-  if name != none {(: relative: relative)}
 }
 
 #let stroked(
