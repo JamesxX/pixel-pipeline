@@ -14,9 +14,16 @@
 
 #let _render(input, output, next) = {
   if "draw" not in input.tags {return next(input, output)}
-  return input + (:
-    content: box([He], stroke: 1pt)
-  )
+  
+  if "polygon" in input.tags {
+    return input + (:
+      content: polygon(
+        ..input.positions.pos().map(pos=>pos.position),
+        fill: input.at("fill", default: none), 
+        stroke: input.at("stroke", default: auto)
+      )
+    )
+  }
 }
 
 #let _layout(input, output, next) = {
