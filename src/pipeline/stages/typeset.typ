@@ -43,7 +43,7 @@
 
   box(
     width: width, height: height,
-    stroke: black,
+    stroke: red + 0.1pt,
     align(top, commands.map(draw.with(bounds: bounds)).join())
   )
 }

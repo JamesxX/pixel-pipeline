@@ -5,9 +5,13 @@
   )
 }
 
+#let stack(layers, key) = {
+  layers.map(layer=>layer.at(key, default: none))
+        .filter(it=>it!=none)
+}
+
 #let through-layers(layers, key) = (input, output) => apply(
   input,
   output,
-  layers.map(layer=>layer.at(key, default: none))
-        .filter(it=>it!=none)
+  stack(layers, key)
 )

@@ -6,6 +6,7 @@
 
 #import "primitives.typ"
 #import "middleware.typ"
+#import "space.typ"
 
 #let stages-render(commands, middleware) = {
   commands.map(cmd=>cmd + middleware(cmd,(:)))
@@ -61,14 +62,54 @@
     }
 
     // Stage: Vertex ----------------------------------------------------------
+    // This stage takes every position, and attempts to transform it from one
+    // space to another. Where a point is relative to another, for each space,
+    // it is checked whether both points exist in the same space. If so, the
+    // position that is relative is made relative to the point (if any) the anchor
+    // itself is relative to.
     if "vertex" in active-middleware {
 
-      if "anchor" in active-middleware {
-        // sort by dependency
-        if anchor-sorter != none {commands = anchor-sorter(commands)}
-      }
+      if anchor-sorter != none {commands = anchor-sorter(commands)}
+
+      let available-anchors = (:)
+
+      // TODO: Make into mapping or otherwise refactor
+    //   for (index, cmd) in commands.enumerate() {
+
+    //     let resolved-named = (:)
+    //     let resolved-positioned = ()
+
+    //     for (name, position) in cmd.positions.named() {
+    //       if "relative" in position {
+
+    //       }
+    //       resolved-named.insert(name, position)
+    //     }
+
+    //     for (position) in cmd.positions.pos(){
+    //       if "relative" in position {
+    //         let (obj, anchor) = position.relative.split(".")
+    //         if obj == "" {
+    //           anchor = anchor.slice(1)
+
+    //         } else {
+
+    //         }
+    //       }
+    //       resolved-positioned.push(position)
+    //     }
+
+    //     available-anchors += resolved-named
+    //     commands.at(index).positions = arguments(
+    //       ..resolved-named,
+    //       ..resolved-positioned
+    //     )
+    //   }
+
+    //   let x = available-anchors
 
     }
+
 
     
     
@@ -83,10 +124,12 @@
 
     // Final vertex projection
     commands = commands.map( cmd => {
+      if "positions" not in cmd {return cmd}
       cmd.positions = utility.arguments.map(cmd.positions, (pos) => {
         primitives.position(
           vector.scale(pos.position, scale),
-          space: "screen"
+          space: "screen",
+          relative: pos.at("relative", default: none),
         )
       })
       return cmd

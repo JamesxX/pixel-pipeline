@@ -1,6 +1,6 @@
 #let position(
-  space: "", // Which coordinate system
-  anchor: none,
+  space: "canvas", // Which coordinate system
+  relative: none,
   name: none,
   coord
 ) = {
@@ -8,6 +8,6 @@
     position: coord,
     space: space
   )
-  if anchor != none {(: anchor: anchor)}
+  if relative != none {(: relative: relative)}
   if name != none {(: name: name)}
 }

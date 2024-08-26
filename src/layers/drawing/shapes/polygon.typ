@@ -5,8 +5,9 @@
   vertices,
   fill: none,
   stroke: auto,
+  ..args
 ) = ({
-  primitives.pipeline.assembled(tags: ("draw", "polygon")  )
+  primitives.pipeline.assembled(tags: ("draw", "polygon"), ..args )
   primitives.pipeline.positioned(
     positions: arguments(..vertices.map(primitives.position), root: position),
   )
