@@ -1,25 +1,25 @@
 #import "/tests/preamble.typ": *
-#import dynamic-canvas: *
+#import pixel: *
 
 #let plotter = pipeline.factory(
   layers: (
-    pipeline.layer.debug(),
+    layer.debug(),
   ),
 )
 
-#let duff-cmd(pos: (0,0)) = (
+#let duff-cmd(pos: (0,0)) = {
+  pipeline.primitives.assembled(
+    tags: ("hello", )
+  )
+  pipeline.primitives.positioned(
+    positions: (:
+      root: pos
+    )
+  )
   pipeline.primitives.rendered(
-    pipeline.primitives.positioned(
-      pipeline.primitives.assembled(
-        tags: ("hello",)
-      ),
-      positions: (:
-        root: pos
-      )
-    ),
     content: [Hello]
-  ),
-)
+  )
+}
 
 #plotter({
   duff-cmd()
